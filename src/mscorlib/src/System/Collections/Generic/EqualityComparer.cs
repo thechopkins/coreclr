@@ -17,7 +17,7 @@ namespace System.Collections.Generic
 {
     [Serializable]
     [TypeDependencyAttribute("System.Collections.Generic.ObjectEqualityComparer`1")]
-    [System.Runtime.CompilerServices.TypeForwardedFrom("mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089")] 
+    [System.Runtime.CompilerServices.TypeForwardedFrom("mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089")]
     public abstract class EqualityComparer<T> : IEqualityComparer, IEqualityComparer<T>
     {
         // To minimize generic instantiation overhead of creating the comparer per type, we keep the generic portion of the code as small
@@ -31,37 +31,54 @@ namespace System.Collections.Generic
 
         internal virtual int IndexOf(T[] array, T value, int startIndex, int count)
         {
+            return IndexOf(this, array, value, startIndex, count);
+        }
+
+        internal static int IndexOf(IEqualityComparer<T> comparer, T[] array, T value, int startIndex, int count)
+        {
             int endIndex = startIndex + count;
             for (int i = startIndex; i < endIndex; i++)
             {
-                if (Equals(array[i], value)) return i;
+                if (comparer.Equals(array[i], value))
+                    return i;
             }
             return -1;
         }
 
         internal virtual int LastIndexOf(T[] array, T value, int startIndex, int count)
         {
-            int endIndex = startIndex - count + 1;
-            for (int i = startIndex; i >= endIndex; i--)
+            return LastIndexOf(this, array, value, startIndex, count);
+        }
+
+        internal static int LastIndexOf(IEqualityComparer<T> comparer, T[] array, T value, int startIndex, int count)
+        {
+            int endIndex = startIndex + count;
+            for (int i = startIndex; i < endIndex; i++)
             {
-                if (Equals(array[i], value)) return i;
+                if (comparer.Equals(array[i], value))
+                    return i;
             }
             return -1;
         }
 
         int IEqualityComparer.GetHashCode(object obj)
         {
-            if (obj == null) return 0;
-            if (obj is T) return GetHashCode((T)obj);
+            if (obj == null)
+                return 0;
+            if (obj is T)
+                return GetHashCode((T)obj);
             ThrowHelper.ThrowArgumentException(ExceptionResource.Argument_InvalidArgumentForComparison);
             return 0;
         }
 
         bool IEqualityComparer.Equals(object x, object y)
         {
-            if (x == y) return true;
-            if (x == null || y == null) return false;
-            if ((x is T) && (y is T)) return Equals((T)x, (T)y);
+            if (x == y)
+                return true;
+            if (x == null || y == null)
+                return false;
+            if ((x is T) && (y is T))
+                return Equals((T)x, (T)y);
             ThrowHelper.ThrowArgumentException(ExceptionResource.Argument_InvalidArgumentForComparison);
             return false;
         }
@@ -70,7 +87,7 @@ namespace System.Collections.Generic
     // The methods in this class look identical to the inherited methods, but the calls
     // to Equal bind to IEquatable<T>.Equals(T) instead of Object.Equals(Object)
     [Serializable]
-    [System.Runtime.CompilerServices.TypeForwardedFrom("mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089")] 
+    [System.Runtime.CompilerServices.TypeForwardedFrom("mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089")]
     internal class GenericEqualityComparer<T> : EqualityComparer<T> where T : IEquatable<T>
     {
         [Pure]
@@ -78,10 +95,12 @@ namespace System.Collections.Generic
         {
             if (x != null)
             {
-                if (y != null) return x.Equals(y);
+                if (y != null)
+                    return x.Equals(y);
                 return false;
             }
-            if (y != null) return false;
+            if (y != null)
+                return false;
             return true;
         }
 
@@ -95,14 +114,16 @@ namespace System.Collections.Generic
             {
                 for (int i = startIndex; i < endIndex; i++)
                 {
-                    if (array[i] == null) return i;
+                    if (array[i] == null)
+                        return i;
                 }
             }
             else
             {
                 for (int i = startIndex; i < endIndex; i++)
                 {
-                    if (array[i] != null && array[i].Equals(value)) return i;
+                    if (array[i] != null && array[i].Equals(value))
+                        return i;
                 }
             }
             return -1;
@@ -115,14 +136,16 @@ namespace System.Collections.Generic
             {
                 for (int i = startIndex; i >= endIndex; i--)
                 {
-                    if (array[i] == null) return i;
+                    if (array[i] == null)
+                        return i;
                 }
             }
             else
             {
                 for (int i = startIndex; i >= endIndex; i--)
                 {
-                    if (array[i] != null && array[i].Equals(value)) return i;
+                    if (array[i] != null && array[i].Equals(value))
+                        return i;
                 }
             }
             return -1;
@@ -139,7 +162,7 @@ namespace System.Collections.Generic
     }
 
     [Serializable]
-    [System.Runtime.CompilerServices.TypeForwardedFrom("mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089")] 
+    [System.Runtime.CompilerServices.TypeForwardedFrom("mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089")]
     internal sealed class NullableEqualityComparer<T> : EqualityComparer<T?> where T : struct, IEquatable<T>
     {
         [Pure]
@@ -147,10 +170,12 @@ namespace System.Collections.Generic
         {
             if (x.HasValue)
             {
-                if (y.HasValue) return x.value.Equals(y.value);
+                if (y.HasValue)
+                    return x.value.Equals(y.value);
                 return false;
             }
-            if (y.HasValue) return false;
+            if (y.HasValue)
+                return false;
             return true;
         }
 
@@ -164,14 +189,16 @@ namespace System.Collections.Generic
             {
                 for (int i = startIndex; i < endIndex; i++)
                 {
-                    if (!array[i].HasValue) return i;
+                    if (!array[i].HasValue)
+                        return i;
                 }
             }
             else
             {
                 for (int i = startIndex; i < endIndex; i++)
                 {
-                    if (array[i].HasValue && array[i].value.Equals(value.value)) return i;
+                    if (array[i].HasValue && array[i].value.Equals(value.value))
+                        return i;
                 }
             }
             return -1;
@@ -184,14 +211,16 @@ namespace System.Collections.Generic
             {
                 for (int i = startIndex; i >= endIndex; i--)
                 {
-                    if (!array[i].HasValue) return i;
+                    if (!array[i].HasValue)
+                        return i;
                 }
             }
             else
             {
                 for (int i = startIndex; i >= endIndex; i--)
                 {
-                    if (array[i].HasValue && array[i].value.Equals(value.value)) return i;
+                    if (array[i].HasValue && array[i].value.Equals(value.value))
+                        return i;
                 }
             }
             return -1;
@@ -206,7 +235,7 @@ namespace System.Collections.Generic
     }
 
     [Serializable]
-    [System.Runtime.CompilerServices.TypeForwardedFrom("mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089")] 
+    [System.Runtime.CompilerServices.TypeForwardedFrom("mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089")]
     internal sealed class ObjectEqualityComparer<T> : EqualityComparer<T>
     {
         [Pure]
@@ -214,10 +243,12 @@ namespace System.Collections.Generic
         {
             if (x != null)
             {
-                if (y != null) return x.Equals(y);
+                if (y != null)
+                    return x.Equals(y);
                 return false;
             }
-            if (y != null) return false;
+            if (y != null)
+                return false;
             return true;
         }
 
@@ -231,14 +262,16 @@ namespace System.Collections.Generic
             {
                 for (int i = startIndex; i < endIndex; i++)
                 {
-                    if (array[i] == null) return i;
+                    if (array[i] == null)
+                        return i;
                 }
             }
             else
             {
                 for (int i = startIndex; i < endIndex; i++)
                 {
-                    if (array[i] != null && array[i].Equals(value)) return i;
+                    if (array[i] != null && array[i].Equals(value))
+                        return i;
                 }
             }
             return -1;
@@ -251,14 +284,16 @@ namespace System.Collections.Generic
             {
                 for (int i = startIndex; i >= endIndex; i--)
                 {
-                    if (array[i] == null) return i;
+                    if (array[i] == null)
+                        return i;
                 }
             }
             else
             {
                 for (int i = startIndex; i >= endIndex; i--)
                 {
-                    if (array[i] != null && array[i].Equals(value)) return i;
+                    if (array[i] != null && array[i].Equals(value))
+                        return i;
                 }
             }
             return -1;
@@ -279,7 +314,7 @@ namespace System.Collections.Generic
     // keep the perofrmance not affected till we hit collision threshold and then we switch to the comparer which is using 
     // randomized string hashing GenericEqualityComparer<string>
     [Serializable]
-    [System.Runtime.CompilerServices.TypeForwardedFrom("mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089")] 
+    [System.Runtime.CompilerServices.TypeForwardedFrom("mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089")]
     internal class NonRandomizedStringEqualityComparer : GenericEqualityComparer<string>
     {
         private static IEqualityComparer<string> s_nonRandomizedComparer;
@@ -299,7 +334,8 @@ namespace System.Collections.Generic
         [Pure]
         public override int GetHashCode(string obj)
         {
-            if (obj == null) return 0;
+            if (obj == null)
+                return 0;
             return obj.GetLegacyNonRandomizedHashCode();
         }
     }
@@ -307,7 +343,7 @@ namespace System.Collections.Generic
     // Performance of IndexOf on byte array is very important for some scenarios.
     // We will call the C runtime function memchr, which is optimized.
     [Serializable]
-    [System.Runtime.CompilerServices.TypeForwardedFrom("mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089")] 
+    [System.Runtime.CompilerServices.TypeForwardedFrom("mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089")]
     internal sealed class ByteEqualityComparer : EqualityComparer<byte>
     {
         [Pure]
@@ -333,7 +369,8 @@ namespace System.Collections.Generic
             if (count > array.Length - startIndex)
                 throw new ArgumentException(SR.Argument_InvalidOffLen);
             Contract.EndContractBlock();
-            if (count == 0) return -1;
+            if (count == 0)
+                return -1;
             fixed (byte* pbytes = array)
             {
                 return Buffer.IndexOfByte(pbytes, value, startIndex, count);
@@ -345,7 +382,8 @@ namespace System.Collections.Generic
             int endIndex = startIndex - count + 1;
             for (int i = startIndex; i >= endIndex; i--)
             {
-                if (array[i] == value) return i;
+                if (array[i] == value)
+                    return i;
             }
             return -1;
         }
@@ -359,7 +397,7 @@ namespace System.Collections.Generic
     }
 
     [Serializable]
-    [System.Runtime.CompilerServices.TypeForwardedFrom("mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089")] 
+    [System.Runtime.CompilerServices.TypeForwardedFrom("mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089")]
     internal class EnumEqualityComparer<T> : EqualityComparer<T>, ISerializable where T : struct
     {
         [Pure]
@@ -396,7 +434,8 @@ namespace System.Collections.Generic
             for (int i = startIndex; i < endIndex; i++)
             {
                 int current = JitHelpers.UnsafeEnumCast(array[i]);
-                if (toFind == current) return i;
+                if (toFind == current)
+                    return i;
             }
             return -1;
         }
@@ -408,7 +447,8 @@ namespace System.Collections.Generic
             for (int i = startIndex; i >= endIndex; i--)
             {
                 int current = JitHelpers.UnsafeEnumCast(array[i]);
-                if (toFind == current) return i;
+                if (toFind == current)
+                    return i;
             }
             return -1;
         }
@@ -416,14 +456,15 @@ namespace System.Collections.Generic
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             // For back-compat we need to serialize the comparers for enums with underlying types other than int as ObjectEqualityComparer 
-            if (Type.GetTypeCode(Enum.GetUnderlyingType(typeof(T))) != TypeCode.Int32) {
+            if (Type.GetTypeCode(Enum.GetUnderlyingType(typeof(T))) != TypeCode.Int32)
+            {
                 info.SetType(typeof(ObjectEqualityComparer<T>));
             }
         }
     }
 
     [Serializable]
-    [System.Runtime.CompilerServices.TypeForwardedFrom("mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089")] 
+    [System.Runtime.CompilerServices.TypeForwardedFrom("mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089")]
     internal sealed class SByteEnumEqualityComparer<T> : EnumEqualityComparer<T> where T : struct
     {
         public SByteEnumEqualityComparer() { }
@@ -440,7 +481,7 @@ namespace System.Collections.Generic
     }
 
     [Serializable]
-    [System.Runtime.CompilerServices.TypeForwardedFrom("mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089")] 
+    [System.Runtime.CompilerServices.TypeForwardedFrom("mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089")]
     internal sealed class ShortEnumEqualityComparer<T> : EnumEqualityComparer<T>, ISerializable where T : struct
     {
         public ShortEnumEqualityComparer() { }
@@ -457,7 +498,7 @@ namespace System.Collections.Generic
     }
 
     [Serializable]
-    [System.Runtime.CompilerServices.TypeForwardedFrom("mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089")] 
+    [System.Runtime.CompilerServices.TypeForwardedFrom("mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089")]
     internal sealed class LongEnumEqualityComparer<T> : EqualityComparer<T>, ISerializable where T : struct
     {
         [Pure]
@@ -491,7 +532,8 @@ namespace System.Collections.Generic
             for (int i = startIndex; i < endIndex; i++)
             {
                 long current = JitHelpers.UnsafeEnumCastLong(array[i]);
-                if (toFind == current) return i;
+                if (toFind == current)
+                    return i;
             }
             return -1;
         }
@@ -503,7 +545,8 @@ namespace System.Collections.Generic
             for (int i = startIndex; i >= endIndex; i--)
             {
                 long current = JitHelpers.UnsafeEnumCastLong(array[i]);
-                if (toFind == current) return i;
+                if (toFind == current)
+                    return i;
             }
             return -1;
         }

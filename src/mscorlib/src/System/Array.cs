@@ -851,7 +851,8 @@ namespace System
             if (array.Rank != 1)
                 ThrowHelper.ThrowRankException(ExceptionResource.Rank_MultiDimNotSupported);
 
-            if (comparer == null) comparer = Comparer.Default;
+            if (comparer == null)
+                comparer = Comparer.Default;
             if (comparer == Comparer.Default)
             {
                 int retval;
@@ -879,7 +880,8 @@ namespace System
                     {
                         ThrowHelper.ThrowInvalidOperationException(ExceptionResource.InvalidOperation_IComparerFailed, e);
                     }
-                    if (c == 0) return i;
+                    if (c == 0)
+                        return i;
                     if (c < 0)
                     {
                         lo = i + 1;
@@ -905,7 +907,8 @@ namespace System
                     {
                         ThrowHelper.ThrowInvalidOperationException(ExceptionResource.InvalidOperation_IComparerFailed, e);
                     }
-                    if (c == 0) return i;
+                    if (c == 0)
+                        return i;
                     if (c < 0)
                     {
                         lo = i + 1;
@@ -1167,7 +1170,8 @@ namespace System
             int endIndex = startIndex + count;
             for (int i = startIndex; i < endIndex; i++)
             {
-                if (match(array[i])) return i;
+                if (match(array[i]))
+                    return i;
             }
             return -1;
         }
@@ -1361,7 +1365,8 @@ namespace System
                 {
                     for (int i = startIndex; i < endIndex; i++)
                     {
-                        if (objArray[i] == null) return i;
+                        if (objArray[i] == null)
+                            return i;
                     }
                 }
                 else
@@ -1369,7 +1374,8 @@ namespace System
                     for (int i = startIndex; i < endIndex; i++)
                     {
                         Object obj = objArray[i];
-                        if (obj != null && obj.Equals(value)) return i;
+                        if (obj != null && obj.Equals(value))
+                            return i;
                     }
                 }
             }
@@ -1380,11 +1386,13 @@ namespace System
                     Object obj = array.GetValue(i);
                     if (obj == null)
                     {
-                        if (value == null) return i;
+                        if (value == null)
+                            return i;
                     }
                     else
                     {
-                        if (obj.Equals(value)) return i;
+                        if (obj.Equals(value))
+                            return i;
                     }
                 }
             }
@@ -1441,6 +1449,75 @@ namespace System
             Contract.EndContractBlock();
 
             return EqualityComparer<T>.Default.IndexOf(array, value, startIndex, count);
+        }
+
+        [Pure]
+        public static int IndexOf<T>(T[] array, T value, IEqualityComparer<T> comparer)
+        {
+            if (array == null)
+            {
+                ThrowHelper.ThrowArgumentNullException(ExceptionArgument.array);
+            }
+            if (comparer == null)
+            {
+                ThrowHelper.ThrowArgumentNullException(ExceptionArgument.comparer);
+            }
+            Contract.Ensures((Contract.Result<int>() < 0) ||
+                (Contract.Result<int>() >= 0 && Contract.Result<int>() < array.Length && EqualityComparer<T>.Default.Equals(value, array[Contract.Result<int>()])));
+            Contract.EndContractBlock();
+
+            return IndexOf(array, value, 0, array.Length, comparer);
+        }
+
+        public static int IndexOf<T>(T[] array, T value, int startIndex, IEqualityComparer<T> comparer)
+        {
+            if (array == null)
+            {
+                ThrowHelper.ThrowArgumentNullException(ExceptionArgument.array);
+            }
+            if (comparer == null)
+            {
+                ThrowHelper.ThrowArgumentNullException(ExceptionArgument.comparer);
+            }
+            Contract.Ensures(Contract.Result<int>() < array.Length);
+            Contract.EndContractBlock();
+
+            return IndexOf(array, value, startIndex, array.Length - startIndex);
+        }
+
+        public static int IndexOf<T>(T[] array, T value, int startIndex, int count, IEqualityComparer<T> comparer)
+        {
+            if (array == null)
+            {
+                ThrowHelper.ThrowArgumentNullException(ExceptionArgument.array);
+            }
+            if (comparer == null)
+            {
+                ThrowHelper.ThrowArgumentNullException(ExceptionArgument.comparer);
+            }
+
+            if (startIndex < 0 || startIndex > array.Length)
+            {
+                ThrowHelper.ThrowStartIndexArgumentOutOfRange_ArgumentOutOfRange_Index();
+            }
+
+            if (count < 0 || count > array.Length - startIndex)
+            {
+                ThrowHelper.ThrowCountArgumentOutOfRange_ArgumentOutOfRange_Count();
+            }
+            Contract.Ensures(Contract.Result<int>() < array.Length);
+            Contract.EndContractBlock();
+
+
+            if (comparer == null)
+            {
+                return EqualityComparer<T>.Default.IndexOf(array, value, startIndex, count);
+            }
+
+            EqualityComparer<T> equalityComparator = comparer as EqualityComparer<T>;
+            return (equalityComparator != null) ?
+                equalityComparator.IndexOf(array, value, startIndex, count)
+                : EqualityComparer<T>.IndexOf(comparer, array, value, startIndex, count);
         }
 
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
@@ -1517,7 +1594,8 @@ namespace System
                 {
                     for (int i = startIndex; i >= endIndex; i--)
                     {
-                        if (objArray[i] == null) return i;
+                        if (objArray[i] == null)
+                            return i;
                     }
                 }
                 else
@@ -1525,7 +1603,8 @@ namespace System
                     for (int i = startIndex; i >= endIndex; i--)
                     {
                         Object obj = objArray[i];
-                        if (obj != null && obj.Equals(value)) return i;
+                        if (obj != null && obj.Equals(value))
+                            return i;
                     }
                 }
             }
@@ -1536,11 +1615,13 @@ namespace System
                     Object obj = array.GetValue(i);
                     if (obj == null)
                     {
-                        if (value == null) return i;
+                        if (value == null)
+                            return i;
                     }
                     else
                     {
-                        if (obj.Equals(value)) return i;
+                        if (obj.Equals(value))
+                            return i;
                     }
                 }
             }
@@ -1612,6 +1693,81 @@ namespace System
             }
 
             return EqualityComparer<T>.Default.LastIndexOf(array, value, startIndex, count);
+        }
+
+        public static int LastIndexOf<T>(T[] array, T value, IEqualityComparer<T> comparer)
+        {
+            if (array == null)
+            {
+                ThrowHelper.ThrowArgumentNullException(ExceptionArgument.array);
+            }
+            Contract.Ensures(Contract.Result<int>() < array.Length);
+            Contract.EndContractBlock();
+
+            return LastIndexOf(array, value, array.Length - 1, array.Length, comparer);
+        }
+
+        public static int LastIndexOf<T>(T[] array, T value, int startIndex, IEqualityComparer<T> comparer)
+        {
+            if (array == null)
+            {
+                ThrowHelper.ThrowArgumentNullException(ExceptionArgument.array);
+            }
+            Contract.Ensures(Contract.Result<int>() < array.Length);
+            Contract.EndContractBlock();
+            // if array is empty and startIndex is 0, we need to pass 0 as count
+            return LastIndexOf(array, value, startIndex, (array.Length == 0) ? 0 : (startIndex + 1), comparer);
+        }
+
+        public static int LastIndexOf<T>(T[] array, T value, int startIndex, int count, IEqualityComparer<T> comparer)
+        {
+            if (array == null)
+            {
+                ThrowHelper.ThrowArgumentNullException(ExceptionArgument.array);
+            }
+            Contract.Ensures(Contract.Result<int>() < array.Length);
+            Contract.EndContractBlock();
+
+            if (array.Length == 0)
+            {
+                //
+                // Special case for 0 length List
+                // accept -1 and 0 as valid startIndex for compablility reason.
+                //
+                if (startIndex != -1 && startIndex != 0)
+                {
+                    ThrowHelper.ThrowStartIndexArgumentOutOfRange_ArgumentOutOfRange_Index();
+                }
+
+                // only 0 is a valid value for count if array is empty
+                if (count != 0)
+                {
+                    ThrowHelper.ThrowCountArgumentOutOfRange_ArgumentOutOfRange_Count();
+                }
+                return -1;
+            }
+
+            // Make sure we're not out of range            
+            if (startIndex < 0 || startIndex >= array.Length)
+            {
+                ThrowHelper.ThrowStartIndexArgumentOutOfRange_ArgumentOutOfRange_Index();
+            }
+
+            // 2nd have of this also catches when startIndex == MAXINT, so MAXINT - 0 + 1 == -1, which is < 0.
+            if (count < 0 || startIndex - count + 1 < 0)
+            {
+                ThrowHelper.ThrowCountArgumentOutOfRange_ArgumentOutOfRange_Count();
+            }
+
+            if (comparer == null)
+            {
+                return EqualityComparer<T>.Default.LastIndexOf(array, value, startIndex, count);
+            }
+
+            EqualityComparer<T> equalityComparator = comparer as EqualityComparer<T>;
+            return (equalityComparator != null) ? 
+                equalityComparator.LastIndexOf(array, value, startIndex, count)
+                : EqualityComparer<T>.LastIndexOf(comparer, array, value, startIndex, count);
         }
 
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
@@ -2011,7 +2167,8 @@ namespace System
 
             internal SorterObjectArray(Object[] keys, Object[] items, IComparer comparer)
             {
-                if (comparer == null) comparer = Comparer.Default;
+                if (comparer == null)
+                    comparer = Comparer.Default;
                 this.keys = keys;
                 this.items = items;
                 this.comparer = comparer;
@@ -2130,8 +2287,10 @@ namespace System
 
                 while (left < right)
                 {
-                    while (comparer.Compare(keys[++left], pivot) < 0) ;
-                    while (comparer.Compare(pivot, keys[--right]) < 0) ;
+                    while (comparer.Compare(keys[++left], pivot) < 0)
+                        ;
+                    while (comparer.Compare(pivot, keys[--right]) < 0)
+                        ;
 
                     if (left >= right)
                         break;
@@ -2217,7 +2376,8 @@ namespace System
 
             internal SorterGenericArray(Array keys, Array items, IComparer comparer)
             {
-                if (comparer == null) comparer = Comparer.Default;
+                if (comparer == null)
+                    comparer = Comparer.Default;
                 this.keys = keys;
                 this.items = items;
                 this.comparer = comparer;
@@ -2336,8 +2496,10 @@ namespace System
 
                 while (left < right)
                 {
-                    while (comparer.Compare(keys.GetValue(++left), pivot) < 0) ;
-                    while (comparer.Compare(pivot, keys.GetValue(--right)) < 0) ;
+                    while (comparer.Compare(keys.GetValue(++left), pivot) < 0)
+                        ;
+                    while (comparer.Compare(pivot, keys.GetValue(--right)) < 0)
+                        ;
 
                     if (left >= right)
                         break;
@@ -2449,8 +2611,10 @@ namespace System
             {
                 get
                 {
-                    if (_index < 0) ThrowHelper.ThrowInvalidOperationException_InvalidOperation_EnumNotStarted();
-                    if (_index >= _endIndex) ThrowHelper.ThrowInvalidOperationException_InvalidOperation_EnumEnded();
+                    if (_index < 0)
+                        ThrowHelper.ThrowInvalidOperationException_InvalidOperation_EnumNotStarted();
+                    if (_index >= _endIndex)
+                        ThrowHelper.ThrowInvalidOperationException_InvalidOperation_EnumEnded();
                     return _array.GetValue(_index);
                 }
             }
@@ -2538,8 +2702,10 @@ namespace System
             {
                 get
                 {
-                    if (index < startIndex) ThrowHelper.ThrowInvalidOperationException_InvalidOperation_EnumNotStarted();
-                    if (_complete) ThrowHelper.ThrowInvalidOperationException_InvalidOperation_EnumEnded();
+                    if (index < startIndex)
+                        ThrowHelper.ThrowInvalidOperationException_InvalidOperation_EnumNotStarted();
+                    if (_complete)
+                        ThrowHelper.ThrowInvalidOperationException_InvalidOperation_EnumEnded();
                     return array.GetValue(_indices);
                 }
             }
@@ -2754,8 +2920,10 @@ namespace System
             {
                 get
                 {
-                    if (_index < 0) ThrowHelper.ThrowInvalidOperationException_InvalidOperation_EnumNotStarted();
-                    if (_index >= _endIndex) ThrowHelper.ThrowInvalidOperationException_InvalidOperation_EnumEnded();
+                    if (_index < 0)
+                        ThrowHelper.ThrowInvalidOperationException_InvalidOperation_EnumNotStarted();
+                    if (_index >= _endIndex)
+                        ThrowHelper.ThrowInvalidOperationException_InvalidOperation_EnumEnded();
                     return _array[_index];
                 }
             }
