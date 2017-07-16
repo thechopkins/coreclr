@@ -778,6 +778,52 @@ namespace System.Collections.Generic
             return Array.IndexOf(_items, item, index, count);
         }
 
+        // Returns the index of the first occurrence of a given value in a range of
+        // this list. The list is searched forwards from beginning to end.
+        // The elements of the list are compared to the given value using the
+        // specified comparer. If no comparer is specified, the default Object.Equals
+        // method is used.
+        // 
+        // This method uses the Array.IndexOf method to perform the
+        // search.
+        // 
+        public int IndexOf(T item, IEqualityComparer<T> comparer)
+        {
+            Contract.Ensures(Contract.Result<int>() >= -1);
+            Contract.Ensures(Contract.Result<int>() < Count);
+            return Array.IndexOf(_items, item, 0, _size, comparer);
+        }
+
+        // Returns the index of the first occurrence of a given value in a range of
+        // this list. The list is searched forwards, starting at index
+        // index and ending at count number of elements. The
+        // elements of the list are compared to the given value using the
+        // specified comparer. If no comparer is specified, the default Object.Equals
+        // method is used.
+        // 
+        // This method uses the Array.IndexOf method to perform the
+        // search.
+        // 
+        public int IndexOf(T item, int index, IEqualityComparer<T> comparer)
+        {
+            if (index > _size)
+                ThrowHelper.ThrowArgumentOutOfRange_IndexException();
+            Contract.Ensures(Contract.Result<int>() >= -1);
+            Contract.Ensures(Contract.Result<int>() < Count);
+            Contract.EndContractBlock();
+            return Array.IndexOf(_items, item, index, _size - index, comparer);
+        }
+
+        // Returns the index of the first occurrence of a given value in a range of
+        // this list. The list is searched forwards, starting at index
+        // index and upto count number of elements. The
+        // elements of the list are compared to the given value using the
+        // specified comparer. If no comparer is specified, the default Object.Equals
+        // method is used.
+        // 
+        // This method uses the Array.IndexOf method to perform the
+        // search.
+        // 
         public int IndexOf(T item, int index, int count, IEqualityComparer<T> comparer)
         {
             if (index > _size)
