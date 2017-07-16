@@ -778,6 +778,20 @@ namespace System.Collections.Generic
             return Array.IndexOf(_items, item, index, count);
         }
 
+        public int IndexOf(T item, int index, int count, IEqualityComparer<T> comparer)
+        {
+            if (index > _size)
+                ThrowHelper.ThrowArgumentOutOfRange_IndexException();
+
+            if (count < 0 || index > _size - count)
+                ThrowHelper.ThrowCountArgumentOutOfRange_ArgumentOutOfRange_Count();
+            Contract.Ensures(Contract.Result<int>() >= -1);
+            Contract.Ensures(Contract.Result<int>() < Count);
+            Contract.EndContractBlock();
+
+            return Array.IndexOf(_items, item, index, count, comparer);
+        }
+
         // Inserts an element into this list at a given index. The size of the list
         // is increased by one. If required, the capacity of the list is doubled
         // before inserting the new element.

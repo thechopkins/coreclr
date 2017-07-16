@@ -1458,10 +1458,6 @@ namespace System
             {
                 ThrowHelper.ThrowArgumentNullException(ExceptionArgument.array);
             }
-            if (comparer == null)
-            {
-                ThrowHelper.ThrowArgumentNullException(ExceptionArgument.comparer);
-            }
             Contract.Ensures((Contract.Result<int>() < 0) ||
                 (Contract.Result<int>() >= 0 && Contract.Result<int>() < array.Length && EqualityComparer<T>.Default.Equals(value, array[Contract.Result<int>()])));
             Contract.EndContractBlock();
@@ -1475,10 +1471,6 @@ namespace System
             {
                 ThrowHelper.ThrowArgumentNullException(ExceptionArgument.array);
             }
-            if (comparer == null)
-            {
-                ThrowHelper.ThrowArgumentNullException(ExceptionArgument.comparer);
-            }
             Contract.Ensures(Contract.Result<int>() < array.Length);
             Contract.EndContractBlock();
 
@@ -1491,11 +1483,6 @@ namespace System
             {
                 ThrowHelper.ThrowArgumentNullException(ExceptionArgument.array);
             }
-            if (comparer == null)
-            {
-                ThrowHelper.ThrowArgumentNullException(ExceptionArgument.comparer);
-            }
-
             if (startIndex < 0 || startIndex > array.Length)
             {
                 ThrowHelper.ThrowStartIndexArgumentOutOfRange_ArgumentOutOfRange_Index();
@@ -1507,8 +1494,7 @@ namespace System
             }
             Contract.Ensures(Contract.Result<int>() < array.Length);
             Contract.EndContractBlock();
-
-
+            
             if (comparer == null)
             {
                 return EqualityComparer<T>.Default.IndexOf(array, value, startIndex, count);
