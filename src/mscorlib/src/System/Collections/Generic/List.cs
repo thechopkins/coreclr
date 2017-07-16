@@ -1021,6 +1021,93 @@ namespace System.Collections.Generic
             return Array.LastIndexOf(_items, item, index, count);
         }
 
+        // Returns the index of the last occurrence of a given value in a range of
+        // this list. The list is searched backwards, starting at the end 
+        // and ending at the first element in the list. The
+        // elements of the list are compared to the given value using the
+        // specified comparer. If no comparer is specified, the default Object.Equals
+        // method is used.
+        // 
+        // This method uses the Array.LastIndexOf method to perform the
+        // search.
+        // 
+        public int LastIndexOf(T item, IEqualityComparer<T> comparer)
+        {
+            Contract.Ensures(Contract.Result<int>() >= -1);
+            Contract.Ensures(Contract.Result<int>() < Count);
+            if (_size == 0)
+            {  // Special case for empty list
+                return -1;
+            }
+            else
+            {
+                return LastIndexOf(item, _size - 1, _size, comparer);
+            }
+        }
+
+        // Returns the index of the last occurrence of a given value in a range of
+        // this list. The list is searched backwards, starting at index
+        // index and ending at the first element in the list. The
+        // elements of the list are compared to the given value using the
+        // specified comparer. If no comparer is specified, the default Object.Equals
+        // method is used.
+        // 
+        // This method uses the Array.LastIndexOf method to perform the
+        // search.
+        // 
+        public int LastIndexOf(T item, int index, IEqualityComparer<T> comparer)
+        {
+            if (index >= _size)
+                ThrowHelper.ThrowArgumentOutOfRange_IndexException();
+            Contract.Ensures(Contract.Result<int>() >= -1);
+            Contract.Ensures(((Count == 0) && (Contract.Result<int>() == -1)) || ((Count > 0) && (Contract.Result<int>() <= index)));
+            Contract.EndContractBlock();
+            return LastIndexOf(item, index, index + 1, comparer);
+        }
+
+        // Returns the index of the last occurrence of a given value in a range of
+        // this list. The list is searched backwards, starting at index
+        // index and upto count elements. The
+        // elements of the list are compared to the given value using the
+        // specified comparer. If no comparer is specified, the default Object.Equals
+        // method is used.
+        // 
+        // This method uses the Array.LastIndexOf method to perform the
+        // search.
+        // 
+        public int LastIndexOf(T item, int index, int count, IEqualityComparer<T> comparer)
+        {
+            if ((Count != 0) && (index < 0))
+            {
+                ThrowHelper.ThrowIndexArgumentOutOfRange_NeedNonNegNumException();
+            }
+
+            if ((Count != 0) && (count < 0))
+            {
+                ThrowHelper.ThrowArgumentOutOfRangeException(ExceptionArgument.count, ExceptionResource.ArgumentOutOfRange_NeedNonNegNum);
+            }
+            Contract.Ensures(Contract.Result<int>() >= -1);
+            Contract.Ensures(((Count == 0) && (Contract.Result<int>() == -1)) || ((Count > 0) && (Contract.Result<int>() <= index)));
+            Contract.EndContractBlock();
+
+            if (_size == 0)
+            {  // Special case for empty list
+                return -1;
+            }
+
+            if (index >= _size)
+            {
+                ThrowHelper.ThrowArgumentOutOfRangeException(ExceptionArgument.index, ExceptionResource.ArgumentOutOfRange_BiggerThanCollection);
+            }
+
+            if (count > index + 1)
+            {
+                ThrowHelper.ThrowArgumentOutOfRangeException(ExceptionArgument.count, ExceptionResource.ArgumentOutOfRange_BiggerThanCollection);
+            }
+
+            return Array.LastIndexOf(_items, item, index, count, comparer);
+        }
+
         // Removes the element at the given index. The size of the list is
         // decreased by one.
         // 
