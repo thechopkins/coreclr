@@ -63,22 +63,17 @@ namespace System.Collections.Generic
 
         int IEqualityComparer.GetHashCode(object obj)
         {
-            if (obj == null)
-                return 0;
-            if (obj is T)
-                return GetHashCode((T)obj);
+            if (obj == null) return 0;
+            if (obj is T) return GetHashCode((T)obj);
             ThrowHelper.ThrowArgumentException(ExceptionResource.Argument_InvalidArgumentForComparison);
             return 0;
         }
 
         bool IEqualityComparer.Equals(object x, object y)
         {
-            if (x == y)
-                return true;
-            if (x == null || y == null)
-                return false;
-            if ((x is T) && (y is T))
-                return Equals((T)x, (T)y);
+            if (x == y) return true;
+            if (x == null || y == null) return false;
+            if ((x is T) && (y is T)) return Equals((T)x, (T)y);
             ThrowHelper.ThrowArgumentException(ExceptionResource.Argument_InvalidArgumentForComparison);
             return false;
         }
@@ -95,12 +90,10 @@ namespace System.Collections.Generic
         {
             if (x != null)
             {
-                if (y != null)
-                    return x.Equals(y);
+                if (y != null) return x.Equals(y);
                 return false;
             }
-            if (y != null)
-                return false;
+            if (y != null) return false;
             return true;
         }
 
@@ -114,16 +107,14 @@ namespace System.Collections.Generic
             {
                 for (int i = startIndex; i < endIndex; i++)
                 {
-                    if (array[i] == null)
-                        return i;
+                    if (array[i] == null) return i;
                 }
             }
             else
             {
                 for (int i = startIndex; i < endIndex; i++)
                 {
-                    if (array[i] != null && array[i].Equals(value))
-                        return i;
+                    if (array[i] != null && array[i].Equals(value)) return i;
                 }
             }
             return -1;
@@ -136,16 +127,14 @@ namespace System.Collections.Generic
             {
                 for (int i = startIndex; i >= endIndex; i--)
                 {
-                    if (array[i] == null)
-                        return i;
+                    if (array[i] == null) return i;
                 }
             }
             else
             {
                 for (int i = startIndex; i >= endIndex; i--)
                 {
-                    if (array[i] != null && array[i].Equals(value))
-                        return i;
+                    if (array[i] != null && array[i].Equals(value)) return i;
                 }
             }
             return -1;
@@ -170,12 +159,10 @@ namespace System.Collections.Generic
         {
             if (x.HasValue)
             {
-                if (y.HasValue)
-                    return x.value.Equals(y.value);
+                if (y.HasValue) return x.value.Equals(y.value);
                 return false;
             }
-            if (y.HasValue)
-                return false;
+            if (y.HasValue) return false;
             return true;
         }
 
@@ -189,16 +176,14 @@ namespace System.Collections.Generic
             {
                 for (int i = startIndex; i < endIndex; i++)
                 {
-                    if (!array[i].HasValue)
-                        return i;
+                    if (!array[i].HasValue) return i;
                 }
             }
             else
             {
                 for (int i = startIndex; i < endIndex; i++)
                 {
-                    if (array[i].HasValue && array[i].value.Equals(value.value))
-                        return i;
+                    if (array[i].HasValue && array[i].value.Equals(value.value)) return i;
                 }
             }
             return -1;
@@ -211,16 +196,14 @@ namespace System.Collections.Generic
             {
                 for (int i = startIndex; i >= endIndex; i--)
                 {
-                    if (!array[i].HasValue)
-                        return i;
+                    if (!array[i].HasValue) return i;
                 }
             }
             else
             {
                 for (int i = startIndex; i >= endIndex; i--)
                 {
-                    if (array[i].HasValue && array[i].value.Equals(value.value))
-                        return i;
+                    if (array[i].HasValue && array[i].value.Equals(value.value)) return i;
                 }
             }
             return -1;
@@ -243,12 +226,10 @@ namespace System.Collections.Generic
         {
             if (x != null)
             {
-                if (y != null)
-                    return x.Equals(y);
+                if (y != null) return x.Equals(y);
                 return false;
             }
-            if (y != null)
-                return false;
+            if (y != null) return false;
             return true;
         }
 
@@ -262,16 +243,14 @@ namespace System.Collections.Generic
             {
                 for (int i = startIndex; i < endIndex; i++)
                 {
-                    if (array[i] == null)
-                        return i;
+                    if (array[i] == null) return i;
                 }
             }
             else
             {
                 for (int i = startIndex; i < endIndex; i++)
                 {
-                    if (array[i] != null && array[i].Equals(value))
-                        return i;
+                    if (array[i] != null && array[i].Equals(value)) return i;
                 }
             }
             return -1;
@@ -284,16 +263,14 @@ namespace System.Collections.Generic
             {
                 for (int i = startIndex; i >= endIndex; i--)
                 {
-                    if (array[i] == null)
-                        return i;
+                    if (array[i] == null) return i;
                 }
             }
             else
             {
                 for (int i = startIndex; i >= endIndex; i--)
                 {
-                    if (array[i] != null && array[i].Equals(value))
-                        return i;
+                    if (array[i] != null && array[i].Equals(value)) return i;
                 }
             }
             return -1;
@@ -334,8 +311,7 @@ namespace System.Collections.Generic
         [Pure]
         public override int GetHashCode(string obj)
         {
-            if (obj == null)
-                return 0;
+            if (obj == null) return 0;
             return obj.GetLegacyNonRandomizedHashCode();
         }
     }
@@ -369,8 +345,7 @@ namespace System.Collections.Generic
             if (count > array.Length - startIndex)
                 throw new ArgumentException(SR.Argument_InvalidOffLen);
             Contract.EndContractBlock();
-            if (count == 0)
-                return -1;
+            if (count == 0) return -1;
             fixed (byte* pbytes = array)
             {
                 return Buffer.IndexOfByte(pbytes, value, startIndex, count);
@@ -382,8 +357,7 @@ namespace System.Collections.Generic
             int endIndex = startIndex - count + 1;
             for (int i = startIndex; i >= endIndex; i--)
             {
-                if (array[i] == value)
-                    return i;
+                if (array[i] == value) return i;
             }
             return -1;
         }
@@ -434,8 +408,7 @@ namespace System.Collections.Generic
             for (int i = startIndex; i < endIndex; i++)
             {
                 int current = JitHelpers.UnsafeEnumCast(array[i]);
-                if (toFind == current)
-                    return i;
+                if (toFind == current) return i;
             }
             return -1;
         }
@@ -447,8 +420,7 @@ namespace System.Collections.Generic
             for (int i = startIndex; i >= endIndex; i--)
             {
                 int current = JitHelpers.UnsafeEnumCast(array[i]);
-                if (toFind == current)
-                    return i;
+                if (toFind == current) return i;
             }
             return -1;
         }
@@ -456,8 +428,7 @@ namespace System.Collections.Generic
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             // For back-compat we need to serialize the comparers for enums with underlying types other than int as ObjectEqualityComparer 
-            if (Type.GetTypeCode(Enum.GetUnderlyingType(typeof(T))) != TypeCode.Int32)
-            {
+            if (Type.GetTypeCode(Enum.GetUnderlyingType(typeof(T))) != TypeCode.Int32) {
                 info.SetType(typeof(ObjectEqualityComparer<T>));
             }
         }
@@ -532,8 +503,7 @@ namespace System.Collections.Generic
             for (int i = startIndex; i < endIndex; i++)
             {
                 long current = JitHelpers.UnsafeEnumCastLong(array[i]);
-                if (toFind == current)
-                    return i;
+                if (toFind == current) return i;
             }
             return -1;
         }
@@ -545,8 +515,7 @@ namespace System.Collections.Generic
             for (int i = startIndex; i >= endIndex; i--)
             {
                 long current = JitHelpers.UnsafeEnumCastLong(array[i]);
-                if (toFind == current)
-                    return i;
+                if (toFind == current) return i;
             }
             return -1;
         }
