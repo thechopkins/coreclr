@@ -2347,8 +2347,7 @@ namespace System
 
             internal SorterGenericArray(Array keys, Array items, IComparer comparer)
             {
-                if (comparer == null)
-                    comparer = Comparer.Default;
+                if (comparer == null) comparer = Comparer.Default;
                 this.keys = keys;
                 this.items = items;
                 this.comparer = comparer;
@@ -2467,10 +2466,8 @@ namespace System
 
                 while (left < right)
                 {
-                    while (comparer.Compare(keys.GetValue(++left), pivot) < 0)
-                        ;
-                    while (comparer.Compare(pivot, keys.GetValue(--right)) < 0)
-                        ;
+                    while (comparer.Compare(keys.GetValue(++left), pivot) < 0) ;
+                    while (comparer.Compare(pivot, keys.GetValue(--right)) < 0) ;
 
                     if (left >= right)
                         break;
@@ -2887,10 +2884,8 @@ namespace System
             {
                 get
                 {
-                    if (_index < 0)
-                        ThrowHelper.ThrowInvalidOperationException_InvalidOperation_EnumNotStarted();
-                    if (_index >= _endIndex)
-                        ThrowHelper.ThrowInvalidOperationException_InvalidOperation_EnumEnded();
+                    if (_index < 0) ThrowHelper.ThrowInvalidOperationException_InvalidOperation_EnumNotStarted();
+                    if (_index >= _endIndex) ThrowHelper.ThrowInvalidOperationException_InvalidOperation_EnumEnded();
                     return _array[_index];
                 }
             }
