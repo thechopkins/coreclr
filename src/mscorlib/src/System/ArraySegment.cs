@@ -232,7 +232,7 @@ namespace System
 
             return index >= 0 ? index - _offset : -1;
         }
-
+        
         void IList<T>.Insert(int index, T item)
         {
             ThrowHelper.ThrowNotSupportedException();

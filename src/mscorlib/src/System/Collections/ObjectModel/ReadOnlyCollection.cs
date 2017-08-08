@@ -60,7 +60,7 @@ namespace System.Collections.ObjectModel
         {
             return list.IndexOf(value);
         }
-
+        
         protected IList<T> Items
         {
             get

@@ -727,7 +727,7 @@ namespace System.Collections.Generic
             Contract.Ensures(Contract.Result<int>() < Count);
             return Array.IndexOf(_items, item, 0, _size);
         }
-
+        
         int System.Collections.IList.IndexOf(Object item)
         {
             if (IsCompatibleObject(item))

@@ -105,7 +105,7 @@ namespace System.Collections.ObjectModel
         {
             return items.IndexOf(item);
         }
-
+        
         public void Insert(int index, T item)
         {
             if (items.IsReadOnly)
