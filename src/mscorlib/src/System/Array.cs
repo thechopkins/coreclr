@@ -851,8 +851,7 @@ namespace System
             if (array.Rank != 1)
                 ThrowHelper.ThrowRankException(ExceptionResource.Rank_MultiDimNotSupported);
 
-            if (comparer == null)
-                comparer = Comparer.Default;
+            if (comparer == null) comparer = Comparer.Default;
             if (comparer == Comparer.Default)
             {
                 int retval;
@@ -880,8 +879,7 @@ namespace System
                     {
                         ThrowHelper.ThrowInvalidOperationException(ExceptionResource.InvalidOperation_IComparerFailed, e);
                     }
-                    if (c == 0)
-                        return i;
+                    if (c == 0) return i;
                     if (c < 0)
                     {
                         lo = i + 1;
@@ -907,8 +905,7 @@ namespace System
                     {
                         ThrowHelper.ThrowInvalidOperationException(ExceptionResource.InvalidOperation_IComparerFailed, e);
                     }
-                    if (c == 0)
-                        return i;
+                    if (c == 0) return i;
                     if (c < 0)
                     {
                         lo = i + 1;
@@ -1170,8 +1167,7 @@ namespace System
             int endIndex = startIndex + count;
             for (int i = startIndex; i < endIndex; i++)
             {
-                if (match(array[i]))
-                    return i;
+                if (match(array[i])) return i;
             }
             return -1;
         }
@@ -1365,8 +1361,7 @@ namespace System
                 {
                     for (int i = startIndex; i < endIndex; i++)
                     {
-                        if (objArray[i] == null)
-                            return i;
+                        if (objArray[i] == null) return i;
                     }
                 }
                 else
@@ -1374,8 +1369,7 @@ namespace System
                     for (int i = startIndex; i < endIndex; i++)
                     {
                         Object obj = objArray[i];
-                        if (obj != null && obj.Equals(value))
-                            return i;
+                        if (obj != null && obj.Equals(value)) return i;
                     }
                 }
             }
@@ -1386,13 +1380,11 @@ namespace System
                     Object obj = array.GetValue(i);
                     if (obj == null)
                     {
-                        if (value == null)
-                            return i;
+                        if (value == null) return i;
                     }
                     else
                     {
-                        if (obj.Equals(value))
-                            return i;
+                        if (obj.Equals(value)) return i;
                     }
                 }
             }
@@ -1580,8 +1572,7 @@ namespace System
                 {
                     for (int i = startIndex; i >= endIndex; i--)
                     {
-                        if (objArray[i] == null)
-                            return i;
+                        if (objArray[i] == null) return i;
                     }
                 }
                 else
@@ -1589,8 +1580,7 @@ namespace System
                     for (int i = startIndex; i >= endIndex; i--)
                     {
                         Object obj = objArray[i];
-                        if (obj != null && obj.Equals(value))
-                            return i;
+                        if (obj != null && obj.Equals(value)) return i;
                     }
                 }
             }
@@ -1601,13 +1591,11 @@ namespace System
                     Object obj = array.GetValue(i);
                     if (obj == null)
                     {
-                        if (value == null)
-                            return i;
+                        if (value == null) return i;
                     }
                     else
                     {
-                        if (obj.Equals(value))
-                            return i;
+                        if (obj.Equals(value)) return i;
                     }
                 }
             }
@@ -2153,8 +2141,7 @@ namespace System
 
             internal SorterObjectArray(Object[] keys, Object[] items, IComparer comparer)
             {
-                if (comparer == null)
-                    comparer = Comparer.Default;
+                if (comparer == null) comparer = Comparer.Default;
                 this.keys = keys;
                 this.items = items;
                 this.comparer = comparer;
@@ -2273,10 +2260,8 @@ namespace System
 
                 while (left < right)
                 {
-                    while (comparer.Compare(keys[++left], pivot) < 0)
-                        ;
-                    while (comparer.Compare(pivot, keys[--right]) < 0)
-                        ;
+                    while (comparer.Compare(keys[++left], pivot) < 0) ;
+                    while (comparer.Compare(pivot, keys[--right]) < 0) ;
 
                     if (left >= right)
                         break;
@@ -2597,10 +2582,8 @@ namespace System
             {
                 get
                 {
-                    if (_index < 0)
-                        ThrowHelper.ThrowInvalidOperationException_InvalidOperation_EnumNotStarted();
-                    if (_index >= _endIndex)
-                        ThrowHelper.ThrowInvalidOperationException_InvalidOperation_EnumEnded();
+                    if (_index < 0) ThrowHelper.ThrowInvalidOperationException_InvalidOperation_EnumNotStarted();
+                    if (_index >= _endIndex) ThrowHelper.ThrowInvalidOperationException_InvalidOperation_EnumEnded();
                     return _array.GetValue(_index);
                 }
             }
@@ -2688,10 +2671,8 @@ namespace System
             {
                 get
                 {
-                    if (index < startIndex)
-                        ThrowHelper.ThrowInvalidOperationException_InvalidOperation_EnumNotStarted();
-                    if (_complete)
-                        ThrowHelper.ThrowInvalidOperationException_InvalidOperation_EnumEnded();
+                    if (index < startIndex) ThrowHelper.ThrowInvalidOperationException_InvalidOperation_EnumNotStarted();
+                    if (_complete) ThrowHelper.ThrowInvalidOperationException_InvalidOperation_EnumEnded();
                     return array.GetValue(_indices);
                 }
             }
